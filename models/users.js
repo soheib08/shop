@@ -6,7 +6,8 @@ let UserSchema = new Schema(
   {
     name: { type: String },
     family: { type: String },
-    mail: { type: String, required: true },
+    mail: { type: String },
+    otp: { type: Number },
     phoneNumber: { type: String, required: true },
     addresses: [
       {
@@ -17,8 +18,7 @@ let UserSchema = new Schema(
     ],
     wishList: [
       {
-        productId: Schema.Types.ObjectId,
-        ref: "Product",
+        productId: { type: Schema.Types.ObjectId, ref: "Product" },
       },
     ],
   },
