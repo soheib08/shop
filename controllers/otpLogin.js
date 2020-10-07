@@ -27,7 +27,7 @@ function VerifyOTPandCreateToken(req, res) {
     .CheckOTP({ mobile, otp })
     .then(() => {
       userFuncs
-        .CreateJWT(mobile)
+        .SetToken(mobile)
         .then((token) => {
           res.send({ token: token });
         })

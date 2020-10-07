@@ -1,6 +1,8 @@
 let UserModel = require("../models/users");
+let TokenModel = require("../models/tokens");
 let jwtGenerator = require("../modules/jwtGenerator");
 
+//user functions
 function UserFindByMobile(userPhoneNumber) {
   let promise = new Promise((resolve, reject) => {
     UserModel.findOne({ phoneNumber: userPhoneNumber })
@@ -26,6 +28,8 @@ function CreateUser({ userPhoneNumber, otp }) {
   });
   return promise;
 }
+
+//otp token functions
 function InsertOTP({ mobile, otp }) {
   return new Promise((resolve, reject) => {
     UserFindByMobile(mobile).then((user) => {
@@ -71,13 +75,34 @@ function CheckOTP({ mobile, otp }) {
       });
   });
 }
-function CreateJWT(mobile) {
+
+//jwt token functions
+function AddToken(token, userId) {
+  return new Promise((resolve, reject) => {
+    TokenModel({ user: userId, token: token })
+      .save()
+      .then(() => {
+        resolve();
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+function SetToken(mobile) {
   return new Promise((resolve, reject) => {
     UserFindByMobile(mobile)
       .then((user) => {
-        const userBody = { _id: user._id, mail: user.mail };
+        const userBody = { id: user._id, phoneNumber: mobile };
         let token = jwtGenerator.createJWT(userBody);
-        resolve(token);
+        AddToken(token, user._id)
+          .then(() => {
+            resolve(token);
+          })
+          .catch((err) => {
+            reject("error with add token to token table");
+          });
       })
       .catch((err) => {
         reject("error with finding user ");
@@ -90,5 +115,5 @@ module.exports = {
   CreateUser,
   InsertOTP,
   CheckOTP,
-  CreateJWT,
+  SetToken,
 };
