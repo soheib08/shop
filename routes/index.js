@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+const { UserFacingError } = require("../modules/errorHandler");
 
 //define routes
 let userRouter = require("./users");
@@ -18,6 +19,19 @@ router.use(
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", { title: "shop" });
+});
+
+router.post("/post", async (req, res, next) => {
+  const { title, author } = req.body;
+
+  try {
+    if (!title || !author) {
+      throw new UserFacingError("Missing required fields: title or author");
+    }
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 });
 
 module.exports = router;

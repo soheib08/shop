@@ -1,6 +1,7 @@
-const userFuncs = require("../functions/user");
+const userFuncs = require("../functions/userFunctions");
 let otpGenerator = require("../utils/otp-generator");
 let SMS = require("../utils/send-sms");
+const { UserFacingError } = require("../modules/errorHandler");
 
 function SendOTP(req, res) {
   const { mobile } = req.body;
@@ -13,15 +14,15 @@ function SendOTP(req, res) {
           res.send({ status: true });
         })
         .catch((err) => {
-          res.send({ status: false });
+          next(err);
         });
     })
     .catch((err) => {
-      res.send({ status: false });
+      next(err);
     });
 }
 
-function VerifyOTPandCreateToken(req, res) {
+function VerifyOTPandCreateToken(req, res, next) {
   const { mobile, otp } = req.body;
   userFuncs
     .CheckOTP({ mobile, otp })
@@ -29,14 +30,14 @@ function VerifyOTPandCreateToken(req, res) {
       userFuncs
         .SetToken(mobile)
         .then((token) => {
-          res.send({ token: token });
+          res.send({ token });
         })
         .catch((err) => {
-          res.send({ msg: err });
+          next(err);
         });
     })
     .catch((err) => {
-      res.send({ msg: err });
+      next(err);
     });
 }
 

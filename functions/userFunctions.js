@@ -1,6 +1,7 @@
 let UserModel = require("../models/users");
 let TokenModel = require("../models/tokens");
 let jwtGenerator = require("../modules/jwtGenerator");
+let { UserFacingError, DataBaseError } = require("../modules/errorHandler");
 
 //user functions
 function UserFindByMobile(userPhoneNumber) {
@@ -10,7 +11,7 @@ function UserFindByMobile(userPhoneNumber) {
         resolve(user);
       })
       .catch((err) => {
-        reject(err);
+        reject(new UserFacingError("user not found"));
       });
   });
   return promise;
@@ -23,7 +24,7 @@ function CreateUser({ userPhoneNumber, otp }) {
         resolve();
       })
       .catch((err) => {
-        reject(err);
+        reject(new UserFacingError("user not create"));
       });
   });
   return promise;
@@ -39,22 +40,17 @@ function InsertOTP({ mobile, otp }) {
           .save()
           .then(() => {
             resolve();
-            // console.log("otp inserted");
           })
           .catch((err) => {
-            reject("has error");
-
-            // console.log(err);
+            reject(new UserFacingError("can not save otp"));
           });
       } else {
         CreateUser({ userPhoneNumber: mobile, otp })
           .then(() => {
             resolve();
-            // console.log("user crated and otp inserted");
           })
           .catch((err) => {
-            reject("has error");
-            // console.log(err);
+            reject(new UserFacingError("user not created"));
           });
       }
     });
@@ -67,11 +63,11 @@ function CheckOTP({ mobile, otp }) {
         if (user.otp == otp) {
           resolve();
         } else {
-          reject("otp is not valid");
+          reject(new UserFacingError("otp is not valid"));
         }
       })
       .catch((err) => {
-        reject("user not found");
+        reject(new UserFacingError("phone number is not correct"));
       });
   });
 }
@@ -85,7 +81,7 @@ function AddToken(token, userId) {
         resolve();
       })
       .catch((err) => {
-        reject(err);
+        reject(new UserFacingError("token not saved in db"));
       });
   });
 }
@@ -101,11 +97,11 @@ function SetToken(mobile) {
             resolve(token);
           })
           .catch((err) => {
-            reject("error with add token to token table");
+            reject(new UserFacingError("token not saved in db"));
           });
       })
       .catch((err) => {
-        reject("error with finding user ");
+        reject(new UserFacingError("user not found"));
       });
   });
 }
