@@ -5,7 +5,12 @@ let Schema = mongoose.Schema;
 let FactorSchema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: "User" },
-    products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+    products: [
+      {
+        productID: { type: Schema.Types.ObjectId, ref: "Product" },
+        count: { type: Number },
+      },
+    ],
     address: {
       description: String,
       plaque: String,

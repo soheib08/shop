@@ -11,6 +11,7 @@
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
+    "ioredis": "^4.17.3",
     "jade": "~1.11.0",
     "jsonwebtoken": "^8.5.1",
     "kavenegar": "^1.1.4",
@@ -19,6 +20,7 @@
     "nodemon": "^2.0.4",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
-    "random-number": "0.0.9"
+    "random-number": "0.0.9",
+    "redis": "^3.0.2"
   }
 }

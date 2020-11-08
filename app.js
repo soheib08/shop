@@ -5,8 +5,16 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const mongoose = require("mongoose");
 const handleErrors = require("./modules/errorHandler").handleErrors;
-
 var app = express();
+
+//redis setup
+const redis = require("redis");
+const client = redis.createClient();
+client.on("connect", function () {
+  console.log("redis is now connected");
+});
+
+//hard code test
 
 mongoose
   .connect("mongodb://localhost:27017/shop", {

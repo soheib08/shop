@@ -6,14 +6,17 @@ let ProductSchema = new Schema(
   {
     name: { type: String, required: true },
     category: { type: Schema.Types.ObjectId, ref: "Category" },
-    features: [{ featureName: String }],
+    features: { type: Array, default: [] },
     prices: [{ price: String }],
-    tags: [{ tagId: Schema.Types.ObjectId, ref: "Tag" }],
+    tags: [{ tagId: { type: Schema.Types.ObjectId, ref: "Tag" } }],
     commnets: [
-      { text: String, date: Date, userId: Schema.Types.ObjectId, ref: "User" },
+      {
+        text: String,
+        date: Date,
+        userId: { type: Schema.Types.ObjectId, ref: "User" },
+      },
     ],
-    images: [{ imageId: Schema.Types.ObjectId, ref: "Image" }],
-    createDate: { type: Date },
+    images: [{ imageId: { type: Schema.Types.ObjectId, ref: "Image" } }],
     description: { type: String },
     like: { type: Number },
     brand: { type: Schema.Types.ObjectId, ref: "Brand" },

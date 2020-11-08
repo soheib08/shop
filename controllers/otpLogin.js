@@ -3,7 +3,7 @@ let otpGenerator = require("../utils/otp-generator");
 let SMS = require("../utils/send-sms");
 const { UserFacingError } = require("../modules/errorHandler");
 
-function SendOTP(req, res) {
+function SendOTP(req, res, next) {
   const { mobile } = req.body;
   let otp = otpGenerator();
   userFuncs
